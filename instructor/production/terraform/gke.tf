@@ -41,12 +41,14 @@ resource "google_container_node_pool" "primary_nodes" {
 }
 
 resource "kubernetes_namespace" "lbg-trainer" {
+  depends_on = [ google_container_node_pool.primary_nodes ]
   metadata {
     name = "lbg-trainer"
   }
 }
 
 resource "kubernetes_namespace" "lbg" {
+  depends_on = [ google_container_node_pool.primary_nodes ]
   count = var.delegatecount 
   metadata {
     name = "lbg-${count.index + 1}"
@@ -55,12 +57,14 @@ resource "kubernetes_namespace" "lbg" {
 
 resource "kubernetes_namespace" "lbg-python" {
   count = var.delegatecount 
+  depends_on = [ google_container_node_pool.primary_nodes ]
   metadata {
     name = "lbg-python-${count.index + 1}"
   }
 }
 
 resource "kubernetes_namespace" "lbg-python-trainer" {
+  depends_on = [ google_container_node_pool.primary_nodes ]
   metadata {
     name = "lbg-python-trainer"
   }
